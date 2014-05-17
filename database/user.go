@@ -29,7 +29,8 @@ func GetUserByEmail(email string) (*model.User, error) {
 
 // SaveUser saves the provided user to the database. If the user is a new
 // user, then the user.Created field is set to the current time. The
-// user.Updated field is set to the current time regardless.
+// user.Updated field is set to the current time regardless. The user's
+// information is also updated from the DB.
 //
 // If the user is a new user, then SaveUser also verifies that the user's
 // email is unique and returns model.ErrInvalidEmail accordingly.
@@ -48,9 +49,10 @@ func SaveUser(u *model.User) error {
 	}
 	u.Updated = time.Now()
 
-	tx := db.MustBegin()
-	tx.NamedExec("INSERT INTO users (created, updated, first_name, last_name, email, password) VALUES (:created, :updated, :first_name, :last_name, :email, :password)", u)
-	tx.Commit()
+	err := db.QueryRowx("INSERT INTO users (created, updated, first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", u.Created, u.Updated, u.FirstName, u.LastName, u.Email, u.Password).Scan(&u.ID)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

@@ -11,19 +11,14 @@ import (
 )
 
 var (
-	// ErrInvalidFirstName is returned when the user's first name is invalid.
 	ErrInvalidFirstName = errors.New("invalid first name")
-	// ErrInvalidLastName is returned when the user's last name is invalid.
-	ErrInvalidLastName = errors.New("invalid last name")
-	// ErrInvalidEmail is returned when the user's email is invalid.
-	ErrInvalidEmail = errors.New("invalid email address")
-	// ErrInvalidPassword is returned when the user's password is invalid.
-	ErrInvalidPassword = errors.New("invalid password")
+	ErrInvalidLastName  = errors.New("invalid last name")
+	ErrInvalidEmail     = errors.New("invalid email address")
+	ErrInvalidPassword  = errors.New("invalid password")
 )
 
 var regexpEmail = regexp.MustCompile(`^[^@]+@[^@.]+\.[^@.]+`)
 
-// User represents a user of hackEDU.
 type User struct {
 	ID        int64     `db:"id"         json:"id"`
 	Created   time.Time `db:"created"    json:"created"`
@@ -34,9 +29,6 @@ type User struct {
 	Password  string    `db:"password"   json:"-"`
 }
 
-// RequestUser represents a user of hackEDU as passed by the frontend.
-// RequestUser will need to be transformed into a User to be stored into the
-// database.
 type RequestUser struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
@@ -44,11 +36,6 @@ type RequestUser struct {
 	Password  string `json:"password"`
 }
 
-// NewUser creates a new user from provided JSON reader. It decodes the JSON,
-// validates the fields, generates a hash from the provided password string
-// using bcrypt, and then returns the created user.
-//
-// NewUser does not save the user to the database.
 func NewUser(jsonReader io.Reader) (*User, error) {
 	var rU RequestUser
 	if err := json.NewDecoder(jsonReader).Decode(&rU); err != nil {

@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/zachlatta/angelhack/database"
+	"github.com/zachlatta/angelhack/hander"
 )
 
 func httpLog(handler http.Handler) http.Handler {
@@ -30,6 +31,13 @@ func main() {
 	defer database.Close()
 
 	r := mux.NewRouter()
+
+	r.Handle("/users",
+		handler.AppHandler(handler.CreateUser)).Methods("POST")
+	r.Handle("/users/authenticate",
+		handler.AppHandler(handler.Authenticate)).Methods("POST")
+	r.Handle("/users/me", handler.AppHandler(handler.CurrentUser)).Methods("GET")
+	r.Handle("/users/{id}", handler.AppHandler(handler.User)).Methods("GET")
 
 	http.Handle("/", r)
 	http.ListenAndServe(":"+port, httpLog(http.DefaultServeMux))
