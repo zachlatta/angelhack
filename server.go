@@ -39,10 +39,8 @@ func main() {
 	r.Handle("/users/me", handler.AppHandler(handler.CurrentUser)).Methods("GET")
 	r.Handle("/users/{id}", handler.AppHandler(handler.User)).Methods("GET")
 
-	r.Handle("/entries",
-		handler.AppHandler(handler.CreateEntry)).Methods("POST")
-	r.Handle("/entries",
-		handler.AppHandler(handler.Entries)).Methods("GET")
+	r.Handle("/entries", handler.AppHandler(handler.CreateEntry)).Methods("POST")
+	r.Handle("/entries", handler.AppHandler(handler.Entries)).Methods("GET")
 
 	http.Handle("/", r)
 	http.ListenAndServe(":"+port, httpLog(http.DefaultServeMux))
