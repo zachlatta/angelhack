@@ -23,12 +23,13 @@ This is the backend server for our AngelHack LA hack.
 
 ##### Response
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 173
 Content-Type: application/json
 Date: Sun, 18 May 2014 07:14:55 GMT
-
+```
+```json
 {
   "created": "2014-05-18T07:14:55.324614747Z",
   "email": "zaphod@beeblebrox.com",
@@ -52,12 +53,13 @@ Date: Sun, 18 May 2014 07:14:55 GMT
 
 ##### Response
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 129
 Content-Type: application/json
 Date: Sun, 18 May 2014 07:16:08 GMT
-
+```
+```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0MDA2NTY1NjgsImlkIjoxNH0.hmfpEmTidzQ5kEzJ3iZ_dMmhg-ohetW5rEyBx2Jl1TM"
 }
@@ -88,12 +90,13 @@ Example of a valid `Authorization` header.
 
 ##### Response
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 126
 Content-Type: application/json
 Date: Sun, 18 May 2014 07:26:43 GMT
-
+```
+```json
 {
   "created": "2014-05-18T07:26:43.204760935Z",
   "id": 14,
@@ -107,14 +110,17 @@ Date: Sun, 18 May 2014 07:26:43 GMT
 
     GET /journals
 
+* Must be authenticated
+
 ###### Response
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 210
 Content-Type: application/json
 Date: Sun, 18 May 2014 07:31:16 GMT
-
+```
+```json
 [
   {
     "created": "2014-05-18T00:00:00Z",
@@ -137,14 +143,17 @@ Date: Sun, 18 May 2014 07:31:16 GMT
 
     GET /journals/:id
 
+* Must be authenticated
+
 ##### Response
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 106
 Content-Type: application/json
 Date: Sun, 18 May 2014 07:32:42 GMT
-
+```
+```json
 {
     "created": "2014-05-18T00:00:00Z",
     "id": 14,
@@ -158,6 +167,8 @@ Date: Sun, 18 May 2014 07:32:42 GMT
 
     POST /journals/:id/entries
 
+* Must be authenticated
+
 ##### Request
 
 ```json
@@ -169,12 +180,13 @@ Date: Sun, 18 May 2014 07:32:42 GMT
 
 ##### Response
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 201
 Content-Type: application/json
 Date: Sun, 18 May 2014 07:35:06 GMT
-
+```
+```json
 {
   "created": "2014-05-18T07:35:06.517898461Z",
   "id": 10,
@@ -183,4 +195,39 @@ Date: Sun, 18 May 2014 07:35:06 GMT
   "rating": 4,
   "updated": "2014-05-18T07:35:06.517898522Z"
 }
+```
+
+#### Get All Entries in Journal
+
+    GET /journals/:id/entries
+
+* Must be authenticated
+
+##### Response
+
+```
+HTTP/1.1 200 OK
+Content-Length: 312
+Content-Type: application/json
+Date: Sun, 18 May 2014 07:37:43 GMT
+```
+```json
+[
+  {
+    "created": "2014-05-18T00:00:00Z",
+    "id": 10,
+    "journalID": 14,
+    "message": "I'm having a great time at this hackathon, but just ran into a bug",
+    "rating": 4,
+    "updated": "2014-05-18T00:00:00Z"
+  },
+  {
+    "created": "2014-05-18T00:00:00Z",
+    "id": 11,
+    "journalID": 14,
+    "message": "Fixed the bug!",
+    "rating": 5,
+    "updated": "2014-05-18T00:00:00Z"
+  }
+]
 ```
