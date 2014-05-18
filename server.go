@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/zachlatta/angelhack/database"
 	"github.com/zachlatta/angelhack/hander"
+	"github.com/zachlatta/cors"
 )
 
 const (
@@ -15,14 +16,19 @@ const (
 	Production             = "PRODUCTION"
 )
 
+var corsHandler http.Handler
+
 func httpLog(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+		corsHandler.ServeHTTP(w, r)
 		handler.ServeHTTP(w, r)
 	})
 }
 
 func main() {
+	log.Println("Application started.")
+
 	production := os.Getenv(ApplicationEnvironment) == Production
 
 	port := os.Getenv("PORT")
@@ -31,6 +37,14 @@ func main() {
 	}
 
 	if production {
+		log.Println("Production detected. Looking for $DATABASE_URL.")
+
+		databaseURL := os.Getenv("DATABASE_URL")
+
+		if databaseURL == "" {
+			log.Fatal("DATABASE_URL is empty")
+		}
+
 		err := database.Init("postgres", os.Getenv("DATABASE_URL"))
 		if err != nil {
 			panic(err)
@@ -43,6 +57,10 @@ func main() {
 		}
 	}
 	defer database.Close()
+
+	corsHandler = cors.Allow(&cors.Options{
+		AllowAllOrigins: true,
+	})
 
 	r := mux.NewRouter()
 
