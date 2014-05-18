@@ -25,6 +25,14 @@ func GetEntry(id int64) (*model.Entry, error) {
 	return &user, nil
 }
 
+func DeleteEntry(id int64) error {
+	_, err := db.Exec("DELETE FROM entries WHERE id=$1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func SaveEntry(e *model.Entry) error {
 	if e.ID == 0 {
 		e.Created = time.Now()

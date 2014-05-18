@@ -62,7 +62,7 @@ func Entity(w http.ResponseWriter, r *http.Request, u *model.User) *AppError {
 
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
 	if err != nil {
-		return &AppError{errors.New("bad entity id"), "bad entity id",
+		return &AppError{err, "bad entry id",
 			http.StatusBadRequest}
 	}
 
@@ -78,6 +78,43 @@ func Entity(w http.ResponseWriter, r *http.Request, u *model.User) *AppError {
 
 	if entry.UserID != u.ID {
 		return &AppError{err, "not authorized", http.StatusUnauthorized}
+	}
+
+	return renderJSON(w, entry, http.StatusOK)
+}
+
+func DeleteEntry(w http.ResponseWriter, r *http.Request,
+	u *model.User) *AppError {
+	if u == nil {
+		return &AppError{ErrUnauthorized, "not authorized",
+			http.StatusUnauthorized}
+	}
+
+	vars := mux.Vars(r)
+
+	id, err := strconv.ParseInt(vars["id"], 10, 64)
+	if err != nil {
+		return &AppError{err, "bad entry id", http.StatusBadRequest}
+	}
+
+	entry, err := database.GetEntry(id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return &AppError{err, "entry does not exist", http.StatusNotFound}
+		}
+
+		return &AppError{err, "error retrieving entry",
+			http.StatusInternalServerError}
+	}
+
+	if entry.UserID != u.ID {
+		return &AppError{err, "not authorized", http.StatusUnauthorized}
+	}
+
+	err = database.DeleteEntry(entry.ID)
+	if err != nil {
+		return &AppError{err, "error deleting entry",
+			http.StatusInternalServerError}
 	}
 
 	return renderJSON(w, entry, http.StatusOK)
