@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/zachlatta/angelhack/database"
 	"github.com/zachlatta/angelhack/hander"
-	"github.com/zachlatta/cors"
 )
 
 const (
@@ -16,12 +15,16 @@ const (
 	Production             = "PRODUCTION"
 )
 
-var corsHandler http.Handler
-
 func httpLog(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
-		corsHandler.ServeHTTP(w, r)
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
 		handler.ServeHTTP(w, r)
 	})
 }
@@ -57,10 +60,6 @@ func main() {
 		}
 	}
 	defer database.Close()
-
-	corsHandler = cors.Allow(&cors.Options{
-		AllowAllOrigins: true,
-	})
 
 	r := mux.NewRouter()
 
