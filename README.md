@@ -3,6 +3,11 @@
 <img src="http://golang.org/doc/gopher/gopherbw.png" width="130" alt="Gopher" align="right">
 This is the backend server for our AngelHack LA hack.
 
+##### Features
+
+* User authentication
+* Journals with entry tracking
+
 ## API Docs
 
 ### Users
