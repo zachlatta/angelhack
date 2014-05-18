@@ -84,6 +84,16 @@ func Authenticate(w http.ResponseWriter, r *http.Request,
 // User gets the user specified by ID in the url.
 func User(w http.ResponseWriter, r *http.Request, u *model.User) *AppError {
 	vars := mux.Vars(r)
+
+	if vars["id"] == "me" {
+		if u == nil {
+			return &AppError{errors.New("user not authorized"), "not authorized",
+				http.StatusUnauthorized}
+		}
+
+		return renderJSON(w, u, http.StatusOK)
+	}
+
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
 	if err != nil {
 		return &AppError{err, "invalid id", http.StatusBadRequest}
@@ -94,15 +104,4 @@ func User(w http.ResponseWriter, r *http.Request, u *model.User) *AppError {
 	}
 
 	return &AppError{err, "unauthorized", http.StatusBadRequest}
-}
-
-// CurrentUser gets the current authenticated user.
-func CurrentUser(w http.ResponseWriter, r *http.Request,
-	u *model.User) *AppError {
-	if u == nil {
-		return &AppError{errors.New("user not authorized"), "not authorized",
-			http.StatusUnauthorized}
-	}
-
-	return renderJSON(w, u, http.StatusOK)
 }
