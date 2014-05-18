@@ -10,6 +10,11 @@ import (
 	"github.com/zachlatta/angelhack/hander"
 )
 
+const (
+	ApplicationEnvironment = "ANGELHACK_ENV"
+	Production             = "PRODUCTION"
+)
+
 func httpLog(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
@@ -18,15 +23,24 @@ func httpLog(handler http.Handler) http.Handler {
 }
 
 func main() {
+	production := os.Getenv(ApplicationEnvironment) == Production
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"
 	}
 
-	err := database.Init("postgres",
-		os.ExpandEnv("postgres://docker:docker@$DB_1_PORT_5432_TCP_ADDR/docker"))
-	if err != nil {
-		panic(err)
+	if production {
+		err := database.Init("postgres", os.Getenv("DATABASE_URL"))
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		err := database.Init("postgres",
+			os.ExpandEnv("postgres://docker:docker@$DB_1_PORT_5432_TCP_ADDR/docker"))
+		if err != nil {
+			panic(err)
+		}
 	}
 	defer database.Close()
 
