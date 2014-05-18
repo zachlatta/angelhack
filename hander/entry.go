@@ -52,7 +52,7 @@ func CreateEntry(w http.ResponseWriter, r *http.Request,
 	return renderJSON(w, entry, http.StatusOK)
 }
 
-func Entity(w http.ResponseWriter, r *http.Request, u *model.User) *AppError {
+func Entry(w http.ResponseWriter, r *http.Request, u *model.User) *AppError {
 	if u == nil {
 		return &AppError{ErrUnauthorized, "not authorized",
 			http.StatusUnauthorized}

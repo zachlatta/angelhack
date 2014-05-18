@@ -41,7 +41,7 @@ func main() {
 
 	r.Handle("/entries", handler.AppHandler(handler.CreateEntry)).Methods("POST")
 	r.Handle("/entries", handler.AppHandler(handler.Entries)).Methods("GET")
-	r.Handle("/entries/{id}", handler.AppHandler(handler.Entity)).Methods("GET")
+	r.Handle("/entries/{id}", handler.AppHandler(handler.Entry)).Methods("GET")
 	r.Handle("/entries/{id}",
 		handler.AppHandler(handler.DeleteEntry)).Methods("DELETE")
 
