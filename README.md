@@ -118,7 +118,7 @@ Date: Sun, 18 May 2014 07:26:43 GMT
 
 * Must be authenticated
 
-###### Response
+##### Response
 
 ```
 HTTP/1.1 200 OK
