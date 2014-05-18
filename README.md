@@ -1,5 +1,6 @@
 # AngelHack LA
 
+<img src="http://golang.org/doc/gopher/gopherbw.png" width="130" alt="Gopher" align="right">
 This is the backend server for our AngelHack LA hack.
 
 ## API Docs
