@@ -179,7 +179,7 @@ Date: Sun, 18 May 2014 07:32:42 GMT
 
 ```json
 {
-  "rating": 4, // must be between 1 and 5
+  "rating": 4,
   "message": "I'm having a great time at this hackathon, but just ran into a bug."
 }
 ```
