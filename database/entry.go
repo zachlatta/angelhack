@@ -6,14 +6,14 @@ import (
 	"github.com/zachlatta/angelhack/model"
 )
 
-func GetEntries(userID int64) ([]model.Entry, error) {
-	users := []model.Entry{}
-	err := db.Select(&users, "SELECT * FROM entries WHERE user_id=$1 ORDER BY id", userID)
+func GetJournalEntries(journalID int64) ([]model.Entry, error) {
+	entries := []model.Entry{}
+	err := db.Select(&entries, "SELECT * FROM entries WHERE journal_id=$1 ORDER BY id", journalID)
 	if err != nil {
 		return nil, err
 	}
 
-	return users, nil
+	return entries, nil
 }
 
 func GetEntry(id int64) (*model.Entry, error) {
@@ -39,7 +39,7 @@ func SaveEntry(e *model.Entry) error {
 	}
 	e.Updated = time.Now()
 
-	err := db.QueryRowx("INSERT INTO entries (user_id, created, updated, rating, message) VALUES ($1, $2, $3, $4, $5) RETURNING id", e.UserID, e.Created, e.Updated, e.Rating, e.Message).Scan(&e.ID)
+	err := db.QueryRowx("INSERT INTO entries (journal_id, created, updated, rating, message) VALUES ($1, $2, $3, $4, $5) RETURNING id", e.JournalID, e.Created, e.Updated, e.Rating, e.Message).Scan(&e.ID)
 	if err != nil {
 		return err
 	}

@@ -38,11 +38,20 @@ func main() {
 		handler.AppHandler(handler.Authenticate)).Methods("POST")
 	r.Handle("/users/{id}", handler.AppHandler(handler.User)).Methods("GET")
 
-	r.Handle("/entries", handler.AppHandler(handler.CreateEntry)).Methods("POST")
-	r.Handle("/entries", handler.AppHandler(handler.Entries)).Methods("GET")
-	r.Handle("/entries/{id}", handler.AppHandler(handler.Entry)).Methods("GET")
+	r.Handle("/journals",
+		handler.AppHandler(handler.CreateJournal)).Methods("POST")
+	r.Handle("/journals",
+		handler.AppHandler(handler.Journals)).Methods("GET")
+	r.Handle("/journals/{id}",
+		handler.AppHandler(handler.Journal)).Methods("GET")
+
+	r.Handle("/journals/{journalID}/entries",
+		handler.AppHandler(handler.CreateJournalEntry)).Methods("POST")
+	r.Handle("/journals/{journalID}/entries",
+		handler.AppHandler(handler.JournalEntries)).Methods("GET")
+
 	r.Handle("/entries/{id}",
-		handler.AppHandler(handler.DeleteEntry)).Methods("DELETE")
+		handler.AppHandler(handler.Entry)).Methods("GET")
 
 	http.Handle("/", r)
 	http.ListenAndServe(":"+port, httpLog(http.DefaultServeMux))

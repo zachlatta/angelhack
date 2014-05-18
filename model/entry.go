@@ -13,15 +13,15 @@ var (
 )
 
 type Entry struct {
-	ID      int64     `db:"id"      json:"id"`
-	UserID  int64     `db:"user_id" json:"user_id"`
-	Created time.Time `db:"created" json:"created"`
-	Updated time.Time `db:"updated" json:"updated"`
-	Rating  int       `db:"rating"  json:"rating"`
-	Message string    `db:"message" json:"message"`
+	ID        int64     `db:"id"      json:"id"`
+	JournalID int64     `db:"journal_id" json:"journalID"`
+	Created   time.Time `db:"created" json:"created"`
+	Updated   time.Time `db:"updated" json:"updated"`
+	Rating    int       `db:"rating"  json:"rating"`
+	Message   string    `db:"message" json:"message"`
 }
 
-func NewEntry(jsonReader io.Reader, userID int64) (*Entry, error) {
+func NewEntry(jsonReader io.Reader, journalID int64) (*Entry, error) {
 	var entry Entry
 	if err := json.NewDecoder(jsonReader).Decode(&entry); err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ func NewEntry(jsonReader io.Reader, userID int64) (*Entry, error) {
 
 	entry.ID = 0
 
-	entry.UserID = userID
+	entry.JournalID = journalID
 
 	if err := entry.validate(); err != nil {
 		return nil, err
