@@ -85,6 +85,11 @@ func main() {
 	r.Handle("/entries/{id}",
 		handler.AppHandler(handler.Entry)).Methods("GET")
 
+	// OPTIONS catchall for CORS.
+	r.HandleFunc("/{**}", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}).Methods("OPTIONS")
+
 	http.Handle("/", r)
 	http.ListenAndServe(":"+port, httpLog(http.DefaultServeMux))
 }
