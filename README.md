@@ -237,3 +237,30 @@ Date: Sun, 18 May 2014 07:37:43 GMT
   }
 ]
 ```
+
+### Entries
+
+#### Get Entry
+
+    GET /entries/:id
+
+* Must be authenticated
+
+##### Response
+
+```
+HTTP/1.1 200 OK
+Content-Length: 181
+Content-Type: application/json
+Date: Sun, 18 May 2014 07:45:19 GMT
+```
+```json
+{
+  "created": "2014-05-18T00:00:00Z",
+  "id": 10,
+  "journalID": 14,
+  "message": "I'm having a great time at this hackathon, but just ran into a bug",
+  "rating": 4,
+  "updated": "2014-05-18T00:00:00Z"
+}
+```
