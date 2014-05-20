@@ -34,3 +34,4 @@ _testmain.go
 gin-bin
 angelhack
 config/config.yml
+secrets.go

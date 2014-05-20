@@ -18,7 +18,7 @@ func NewToken(user *User) (*Token, error) {
 	token.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
 	// TODO: Sign the token with an actual secret
-	tokenString, err := token.SignedString([]byte("secret"))
+	tokenString, err := token.SignedString([]byte(secret))
 	if err != nil {
 		return nil, err
 	}
